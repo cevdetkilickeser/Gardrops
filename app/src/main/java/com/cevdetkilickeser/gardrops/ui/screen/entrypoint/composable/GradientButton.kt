@@ -2,6 +2,7 @@ package com.cevdetkilickeser.gardrops.ui.screen.entrypoint.composable
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,49 +27,47 @@ import com.cevdetkilickeser.gardrops.ui.theme.GardropsTheme
 fun GradientButton(
     text: String,
     onClick: () -> Unit,
-    icon: ImageVector? = null
+    icon: ImageVector? = null,
+    enabled: Boolean = true
 ) {
-    Box(
+    Button(
         modifier = Modifier
+            .fillMaxWidth()
             .background(
-                brush = Brush.linearGradient(
+                brush = Brush.horizontalGradient(
                     colors = listOf(
                         MaterialTheme.colorScheme.primary,
                         MaterialTheme.colorScheme.secondary
                     )
                 ),
-                shape = RoundedCornerShape(8.dp)
-            )
-            .fillMaxWidth()
-    ) {
-        Button(
-            onClick = onClick,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color.Transparent
+                shape = RoundedCornerShape(8.dp),
             ),
-            shape = RoundedCornerShape(8.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.Transparent,
+        ),
+        enabled = enabled,
+        contentPadding = PaddingValues(),
+        onClick = { onClick() },
+    ) {
+        Box(
             modifier = Modifier.fillMaxWidth()
         ) {
-            Box(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                icon?.let {
-                    Icon(
-                        imageVector = it,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onPrimary,
-                        modifier = Modifier
-                            .align(Alignment.CenterStart)
-                            .padding(vertical = 4.dp)
-                    )
-                }
-                Text(
-                    text = text,
-                    color = MaterialTheme.colorScheme.onPrimary,
+            icon?.let {
+                Icon(
+                    imageVector = it,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier
-                        .align(Alignment.Center)
+                        .align(Alignment.CenterStart)
+                        .padding(vertical = 4.dp, horizontal = 16.dp)
                 )
             }
+            Text(
+                text = text,
+                color = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier
+                    .align(Alignment.Center)
+            )
         }
     }
 }
@@ -79,7 +78,7 @@ private fun GradientButtonPreview() {
     GardropsTheme {
         GradientButton(
             text = "Telefon ile Giriş yap",
-            onClick = {  },
+            onClick = { },
             icon = Icons.Default.Phone
         )
     }
