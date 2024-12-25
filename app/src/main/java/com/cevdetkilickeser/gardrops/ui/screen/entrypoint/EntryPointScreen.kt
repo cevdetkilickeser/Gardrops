@@ -36,10 +36,10 @@ fun EntryPointScreen(
     uiState: UiState,
     uiEffect: Flow<UiEffect>,
     uiAction: (UiAction) -> Unit,
-    navigateToSignInWithPhone: () -> Unit,
-    navigateToSignInWithUsernameOrEmail: () -> Unit,
-    navigateToUserAgreement: () -> Unit,
-    navigateToPrivacyPolicy: () -> Unit
+    navigateToSignInWithPhoneScreen: () -> Unit,
+    navigateToSignInWithUsernameOrEmailScreen: () -> Unit,
+    navigateToUserAgreementScreen: () -> Unit,
+    navigateToPrivacyPolicyScreen: () -> Unit
 ) {
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
@@ -47,10 +47,10 @@ fun EntryPointScreen(
 
     uiEffect.CollectWithLifecycle { effect ->
         when (effect) {
-            UiEffect.NavigateToSignInWithPhoneScreen -> navigateToSignInWithPhone()
-            UiEffect.NavigateToSignInWithUsernameOrEmailScreen -> navigateToSignInWithUsernameOrEmail()
-            UiEffect.NavigateToUserAgreementScreen -> navigateToUserAgreement()
-            UiEffect.NavigateToPrivacyPolicyScreen -> navigateToPrivacyPolicy()
+            UiEffect.NavigateToSignInWithPhoneScreen -> navigateToSignInWithPhoneScreen()
+            UiEffect.NavigateToSignInWithUsernameOrEmailScreen -> navigateToSignInWithUsernameOrEmailScreen()
+            UiEffect.NavigateToUserAgreementScreen -> navigateToUserAgreementScreen()
+            UiEffect.NavigateToPrivacyPolicyScreen -> navigateToPrivacyPolicyScreen()
         }
     }
 
@@ -61,8 +61,8 @@ fun EntryPointScreen(
             phoneClick = { uiAction(UiAction.SignInWithPhoneClicked) },
             bottomText = {
                 AgreementAndPrivacyText(
-                    onTermsClicked = { uiAction(UiAction.UserAgreementClicked) },
-                    onPrivacyClicked = { uiAction(UiAction.PrivacyPolicyClicked) }
+                    onUserAgreementClicked = { uiAction(UiAction.UserAgreementClicked) },
+                    onPrivacyPolicyClicked = { uiAction(UiAction.PrivacyPolicyClicked) }
                 )
             },
             onDismissRequest = { uiAction(UiAction.SignUpBottomSheetDismissed) }
@@ -121,10 +121,10 @@ private fun EntryPointScreenPreview() {
             uiState = UiState(),
             uiEffect = emptyFlow(),
             uiAction = {},
-            navigateToSignInWithPhone = {},
-            navigateToSignInWithUsernameOrEmail = {},
-            navigateToUserAgreement = {},
-            navigateToPrivacyPolicy = {}
+            navigateToSignInWithPhoneScreen = {},
+            navigateToSignInWithUsernameOrEmailScreen = {},
+            navigateToUserAgreementScreen = {},
+            navigateToPrivacyPolicyScreen = {}
         )
     }
 }
