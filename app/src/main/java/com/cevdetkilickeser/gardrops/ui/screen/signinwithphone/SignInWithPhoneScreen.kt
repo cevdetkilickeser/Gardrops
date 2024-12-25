@@ -45,14 +45,16 @@ fun SignInWithPhoneScreen(
     uiEffect: Flow<UiEffect>,
     uiAction: (UiAction) -> Unit,
     navigateToSignInWithUsernameOrEmail: () -> Unit,
+    navigateToSignUpWithUsernameOrEmail: () -> Unit,
     navigateToHomeScreen: () -> Unit,
     onBackClick: () -> Unit
 ) {
 
     uiEffect.CollectWithLifecycle { effect ->
         when (effect) {
-            UiEffect.NavigateToSignInWithUsernameOrEmailScreen -> navigateToSignInWithUsernameOrEmail()
             UiEffect.NavigateToHomeScreen -> navigateToHomeScreen()
+            UiEffect.NavigateToSignInWithUsernameOrEmailScreen -> navigateToSignInWithUsernameOrEmail()
+            UiEffect.NavigateToSignUpWithUsernameOrEmailScreen -> navigateToSignUpWithUsernameOrEmail()
         }
     }
 
@@ -135,7 +137,7 @@ fun SignInWithPhoneScreen(
             )
             Spacer(modifier = Modifier.height(16.dp))
             SignInWithUsernameOrEmailText(
-                onClick = { uiAction(UiAction.SignInWithUsernameOrEmailClicked) }
+                onClick = { uiAction(UiAction.ContinueWithUsernameOrEmailClicked(uiState.continueType)) }
             )
             Spacer(modifier = Modifier.height(16.dp))
         }
@@ -151,6 +153,7 @@ private fun SignInWithPhoneScreenPreview() {
             uiEffect = emptyFlow(),
             uiAction = {},
             navigateToSignInWithUsernameOrEmail = {},
+            navigateToSignUpWithUsernameOrEmail = {},
             navigateToHomeScreen = {},
             onBackClick = {}
         )

@@ -1,7 +1,11 @@
 package com.cevdetkilickeser.gardrops.ui.screen.signinwithphone
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
+import com.cevdetkilickeser.gardrops.navigation.Screen
+import com.cevdetkilickeser.gardrops.ui.screen.entrypoint.composable.ContinueType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -16,7 +20,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class SignInWithPhoneViewModel @Inject constructor(): ViewModel(){
+class SignInWithPhoneViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle
+): ViewModel(){
 
     private val _uiState = MutableStateFlow(UiState())
     val uiState = _uiState.asStateFlow()
@@ -24,14 +30,17 @@ class SignInWithPhoneViewModel @Inject constructor(): ViewModel(){
     private val _uiEffect by lazy { Channel<UiEffect>() }
     val uiEffect: Flow<UiEffect> by lazy { _uiEffect.receiveAsFlow() }
 
+    init {
+        val args = savedStateHandle.toRoute<Screen.SignInWithPhone>()
+        updateUiState { copy(continueType = args.continueType) }
+    }
+
     fun onAction(action: UiAction) {
         when (action) {
             is UiAction.PhoneNumberChanged -> phoneNumberChanged(action.text)
             UiAction.ClearPhoneNumberClicked -> phoneNumberChanged("0 (5")
             UiAction.SignInClicked -> TODO()
-            UiAction.SignInWithUsernameOrEmailClicked -> viewModelScope.launch {
-                emitUiEffect(UiEffect.NavigateToSignInWithUsernameOrEmailScreen)
-            }
+            is UiAction.ContinueWithUsernameOrEmailClicked -> continueWithUsernameOrEmailClicked(action.continueType)
         }
     }
 
@@ -57,6 +66,16 @@ class SignInWithPhoneViewModel @Inject constructor(): ViewModel(){
             }
             else -> {
                 updateUiState { copy(phoneNumber = text, isClearTextIconVisible = true, isSignInButtonEnabled = false) }
+            }
+        }
+    }
+
+    private fun continueWithUsernameOrEmailClicked(continueType: ContinueType) {
+        viewModelScope.launch {
+            if (continueType == ContinueType.SIGN_IN) {
+                emitUiEffect(UiEffect.NavigateToSignInWithUsernameOrEmailScreen)
+            } else {
+                emitUiEffect(UiEffect.NavigateToSignUpWithUsernameOrEmailScreen)
             }
         }
     }
