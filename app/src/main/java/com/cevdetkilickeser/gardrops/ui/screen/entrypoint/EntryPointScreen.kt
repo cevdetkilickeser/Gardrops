@@ -27,6 +27,7 @@ import com.cevdetkilickeser.gardrops.ui.screen.entrypoint.composable.CustomOutli
 import com.cevdetkilickeser.gardrops.ui.screen.entrypoint.composable.GradientButton
 import com.cevdetkilickeser.gardrops.ui.screen.entrypoint.composable.SignInWithUsernameOrEmailText
 import com.cevdetkilickeser.gardrops.ui.screen.entrypoint.composable.AgreementAndPrivacyText
+import com.cevdetkilickeser.gardrops.ui.screen.entrypoint.composable.ContinueType
 import com.cevdetkilickeser.gardrops.ui.theme.GardropsTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
@@ -36,7 +37,7 @@ fun EntryPointScreen(
     uiState: UiState,
     uiEffect: Flow<UiEffect>,
     uiAction: (UiAction) -> Unit,
-    navigateToSignInWithPhoneScreen: () -> Unit,
+    navigateToSignInWithPhoneScreen: (ContinueType) -> Unit,
     navigateToSignInWithUsernameOrEmailScreen: () -> Unit,
     navigateToUserAgreementScreen: () -> Unit,
     navigateToPrivacyPolicyScreen: () -> Unit
@@ -47,7 +48,7 @@ fun EntryPointScreen(
 
     uiEffect.CollectWithLifecycle { effect ->
         when (effect) {
-            UiEffect.NavigateToSignInWithPhoneScreen -> navigateToSignInWithPhoneScreen()
+            is UiEffect.NavigateToSignInWithPhoneScreen -> navigateToSignInWithPhoneScreen(effect.continueType)
             UiEffect.NavigateToSignInWithUsernameOrEmailScreen -> navigateToSignInWithUsernameOrEmailScreen()
             UiEffect.NavigateToUserAgreementScreen -> navigateToUserAgreementScreen()
             UiEffect.NavigateToPrivacyPolicyScreen -> navigateToPrivacyPolicyScreen()
@@ -57,8 +58,8 @@ fun EntryPointScreen(
     if (uiState.isSignUpBottomSheetVisible) {
         AuthBottomSheet(
             title = "Gardrops'a Katıl",
-            facebookClick = { uiAction(UiAction.SignUpWithFacebookClicked) },
-            phoneClick = { uiAction(UiAction.SignInWithPhoneClicked) },
+            facebookClick = { uiAction(UiAction.ContinueWithFacebookClicked(ContinueType.SIGN_UP)) },
+            phoneClick = { uiAction(UiAction.ContinueWithPhoneClicked(ContinueType.SIGN_UP)) },
             bottomText = {
                 AgreementAndPrivacyText(
                     onUserAgreementClicked = { uiAction(UiAction.UserAgreementClicked) },
@@ -72,8 +73,8 @@ fun EntryPointScreen(
     if (uiState.isSignInBottomSheetVisible) {
         AuthBottomSheet(
             title = "Giriş Yap",
-            facebookClick = { uiAction(UiAction.SignUpWithFacebookClicked) },
-            phoneClick = { uiAction(UiAction.SignInWithPhoneClicked) },
+            facebookClick = { uiAction(UiAction.ContinueWithFacebookClicked(ContinueType.SIGN_IN)) },
+            phoneClick = { uiAction(UiAction.ContinueWithPhoneClicked(ContinueType.SIGN_IN)) },
             bottomText = {
                 SignInWithUsernameOrEmailText (
                     onClick = { uiAction(UiAction.SignInWithUsernameOrEmailTextClicked) }

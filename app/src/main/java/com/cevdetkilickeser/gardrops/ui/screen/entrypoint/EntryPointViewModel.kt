@@ -14,6 +14,7 @@ import javax.inject.Inject
 import com.cevdetkilickeser.gardrops.ui.screen.entrypoint.EntryPointContract.UiState
 import com.cevdetkilickeser.gardrops.ui.screen.entrypoint.EntryPointContract.UiAction
 import com.cevdetkilickeser.gardrops.ui.screen.entrypoint.EntryPointContract.UiEffect
+import com.cevdetkilickeser.gardrops.ui.screen.entrypoint.composable.ContinueType
 
 @HiltViewModel
 class EntryPointViewModel @Inject constructor() : ViewModel() {
@@ -29,10 +30,9 @@ class EntryPointViewModel @Inject constructor() : ViewModel() {
 
             UiAction.SignUpClicked -> updateUiState { copy(isSignUpBottomSheetVisible = true) }
             UiAction.SignInClicked -> updateUiState { copy(isSignInBottomSheetVisible = true) }
-            UiAction.SignUpWithFacebookClicked -> TODO()
-            UiAction.SignInWithFacebookClicked -> TODO()
-            UiAction.SignInWithPhoneClicked -> viewModelScope.launch {
-                emitUiEffect(UiEffect.NavigateToSignInWithPhoneScreen)
+            is UiAction.ContinueWithFacebookClicked -> TODO()
+            is UiAction.ContinueWithPhoneClicked -> viewModelScope.launch {
+                emitUiEffect(UiEffect.NavigateToSignInWithPhoneScreen(action.continueType))
             }
             UiAction.SignInWithUsernameOrEmailTextClicked -> viewModelScope.launch {
                 emitUiEffect(UiEffect.NavigateToSignInWithUsernameOrEmailScreen)
