@@ -1,11 +1,8 @@
 package com.cevdetkilickeser.gardrops.ui.screen.entrypoint.composable
 
-import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -18,8 +15,8 @@ import com.cevdetkilickeser.gardrops.ui.theme.GardropsTheme
 
 @Composable
 fun AgreementAndPrivacyText(
-    onTermsClicked: () -> Unit,
-    onPrivacyClicked: () -> Unit
+    onUserAgreementClicked: () -> Unit,
+    onPrivacyPolicyClicked: () -> Unit
 ) {
     val annotatedText = buildAnnotatedString {
         append("Devam ederek ")
@@ -41,26 +38,21 @@ fun AgreementAndPrivacyText(
         append(" kabul ediyorum.")
     }
 
-    Text(
+    ClickableText(
         text = annotatedText,
-        style = TextStyle(fontSize = 12.sp, textAlign = TextAlign.Center),
-        color = MaterialTheme.colorScheme.onBackground,
-        onTextLayout = { layoutResult ->
-            val clickHandler: (Int) -> Unit = { offset ->
-                annotatedText.getStringAnnotations(start = offset, end = offset).firstOrNull()
-                    ?.let { annotation ->
-                        when (annotation.tag) {
-                            "AGREEMENT" -> onTermsClicked()
-                            "PRIVACY" -> onPrivacyClicked()
-                        }
+        style = TextStyle(
+            fontSize = 12.sp,
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onBackground
+        ),
+        onClick = { offset ->
+            annotatedText.getStringAnnotations(start = offset, end = offset).firstOrNull()
+                ?.let { annotation ->
+                    when (annotation.tag) {
+                        "AGREEMENT" -> onUserAgreementClicked()
+                        "PRIVACY" -> onPrivacyPolicyClicked()
                     }
-            }
-            Modifier.pointerInput(Unit) {
-                detectTapGestures { position ->
-                    val offset = layoutResult.getOffsetForPosition(position)
-                    clickHandler(offset)
                 }
-            }
         }
     )
 }
@@ -70,8 +62,8 @@ fun AgreementAndPrivacyText(
 private fun AgreementAndPrivacyTextPreview() {
     GardropsTheme {
         AgreementAndPrivacyText(
-            onTermsClicked = {},
-            onPrivacyClicked = {}
+            onUserAgreementClicked = {},
+            onPrivacyPolicyClicked = {}
         )
     }
 }
