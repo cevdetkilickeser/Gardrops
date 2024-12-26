@@ -30,7 +30,7 @@ class SignInWithUsernameOrEmailViewModel @Inject constructor() : ViewModel() {
             is UiAction.PasswordChanged -> updateUiState { copy(password = action.password) }
             is UiAction.PasswordVisibilityChanged -> updateUiState { copy(isPasswordVisible = !uiState.value.isPasswordVisible) }
             is UiAction.SignInButtonClicked -> TODO()
-            UiAction.ForgotPasswordClicked -> viewModelScope.launch { emitUiEffect(UiEffect.NavigateToForgotPasswordScreen) }
+            UiAction.RememberPasswordClicked -> viewModelScope.launch { emitUiEffect(UiEffect.NavigateToForgotPasswordScreen) }
         }
     }
 

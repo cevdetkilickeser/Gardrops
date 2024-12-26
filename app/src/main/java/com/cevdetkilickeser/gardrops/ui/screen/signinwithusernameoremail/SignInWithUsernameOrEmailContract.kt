@@ -13,7 +13,7 @@ object SignInWithUsernameOrEmailContract {
         data class PasswordChanged(val password: String) : UiAction
         data object PasswordVisibilityChanged : UiAction
         data class SignInButtonClicked(val emailOrUsername: String, val password: String) : UiAction
-        data object ForgotPasswordClicked : UiAction
+        data object RememberPasswordClicked : UiAction
     }
 
     sealed class UiEffect {

@@ -46,14 +46,14 @@ fun SignInWithUsernameOrEmailScreen(
     uiEffect: Flow<UiEffect>,
     uiAction: (UiAction) -> Unit,
     navigateToHomeScreen: () -> Unit,
-    navigateToForgotPassword: () -> Unit,
+    navigateToRememberPasswordScreen: () -> Unit,
     onBackClick: () -> Unit
 ) {
     val context = LocalContext.current
     uiEffect.CollectWithLifecycle { action ->
         when (action) {
             UiEffect.NavigateToHomeScreen -> navigateToHomeScreen()
-            UiEffect.NavigateToForgotPasswordScreen -> navigateToForgotPassword()
+            UiEffect.NavigateToForgotPasswordScreen -> navigateToRememberPasswordScreen()
             is UiEffect.ShowToast -> { Toast.makeText(context, action.message, Toast.LENGTH_SHORT).show() }
         }
     }
@@ -148,7 +148,7 @@ fun SignInWithUsernameOrEmailScreen(
                 color = Color.LightGray,
                 modifier = Modifier
                     .padding(top = 16.dp)
-                    .clickable { uiAction(UiAction.ForgotPasswordClicked) }
+                    .clickable { uiAction(UiAction.RememberPasswordClicked) }
             )
         }
     }
@@ -163,7 +163,7 @@ private fun SignInWithUsernameOrEmailScreenPreview() {
             uiEffect = emptyFlow(),
             uiAction = {},
             navigateToHomeScreen = {},
-            navigateToForgotPassword = {},
+            navigateToRememberPasswordScreen = {},
             onBackClick = {}
         )
     }
