@@ -45,29 +45,41 @@ class SignInWithPhoneViewModel @Inject constructor(
     }
 
     private fun phoneNumberChanged(text: String) {
-        when (text.length) {
-            4 -> {
-                updateUiState { copy(phoneNumber = text, isClearTextIconVisible = false, isSignInButtonEnabled = false) }
+        val phoneNumber = editPhoneNumber(text)
+        updateUiState { copy(phoneNumber = phoneNumber) }
+        when {
+            phoneNumber.length in 4..16 -> {
+                updateUiState { copy(isClearTextIconVisible = true, isSignInButtonEnabled = false) }
             }
-            6 -> {
-                val editedText = "$text) "
-                updateUiState { copy(phoneNumber = editedText, isSignInButtonEnabled = false) }
+            phoneNumber.length == 17 -> {
+                updateUiState { copy(isClearTextIconVisible = true, isSignInButtonEnabled = true) }
             }
-            11 -> {
-                val editedText = "$text "
-                updateUiState { copy(phoneNumber = editedText, isSignInButtonEnabled = false) }
-            }
-            14 -> {
-                val editedText = "$text "
-                updateUiState { copy(phoneNumber = editedText, isSignInButtonEnabled = false) }
-            }
-            17 -> {
-                updateUiState { copy(phoneNumber = text, isSignInButtonEnabled = true) }
-            }
-            else -> {
-                updateUiState { copy(phoneNumber = text, isClearTextIconVisible = true, isSignInButtonEnabled = false) }
-            }
+            phoneNumber.length > 17 -> {}
         }
+    }
+
+    private fun editPhoneNumber(text: String) : String{
+        val digits = extractDigits(text)
+        if (digits.size >= 2) {
+            digits.add(1," ")
+            digits.add(2,"(")
+        }
+        if (digits.size >= 7) {
+            digits.add(6,")")
+            digits.add(7," ")
+        }
+        if (digits.size >= 12) {
+            digits.add(11," ")
+        }
+        if (digits.size >= 15) {
+            digits.add(14," ")
+        }
+        return digits.joinToString("")
+    }
+
+    private fun extractDigits(text: String): MutableList<String> {
+        return text.filter { it.isDigit() }
+            .map { it.toString() }.toMutableList()
     }
 
     private fun continueWithUsernameOrEmailClicked(continueType: ContinueType) {

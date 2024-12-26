@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,10 +31,10 @@ import androidx.compose.ui.unit.dp
 import com.cevdetkilickeser.gardrops.common.CollectWithLifecycle
 import com.cevdetkilickeser.gardrops.ui.screen.entrypoint.composable.GradientButton
 import com.cevdetkilickeser.gardrops.ui.screen.entrypoint.composable.SignInWithUsernameOrEmailText
-import com.cevdetkilickeser.gardrops.ui.theme.GardropsTheme
-import com.cevdetkilickeser.gardrops.ui.screen.signinwithphone.SignInWithPhoneContract.UiState
 import com.cevdetkilickeser.gardrops.ui.screen.signinwithphone.SignInWithPhoneContract.UiAction
 import com.cevdetkilickeser.gardrops.ui.screen.signinwithphone.SignInWithPhoneContract.UiEffect
+import com.cevdetkilickeser.gardrops.ui.screen.signinwithphone.SignInWithPhoneContract.UiState
+import com.cevdetkilickeser.gardrops.ui.theme.GardropsTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 
@@ -92,9 +91,7 @@ fun SignInWithPhoneScreen(
             ) {
                 Text(text = "Cep Telefonu")
                 Spacer(modifier = Modifier.height(16.dp))
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
                 ) {
@@ -103,11 +100,16 @@ fun SignInWithPhoneScreen(
                         onValueChange = { uiAction(UiAction.PhoneNumberChanged(it)) },
                         textStyle = MaterialTheme.typography.bodyLarge,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.CenterStart)
                     )
                     if (uiState.isClearTextIconVisible) {
                         IconButton(
                             onClick = { uiAction(UiAction.ClearPhoneNumberClicked) },
-                            modifier = Modifier.size(16.dp)
+                            modifier = Modifier
+                                .size(16.dp)
+                                .align(Alignment.CenterEnd)
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Close,
