@@ -2,9 +2,10 @@ package com.cevdetkilickeser.gardrops.ui.screen.signupwithusernameandemail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cevdetkilickeser.gardrops.ui.screen.signupwithusernameandemail.SignUpWithUsernameAndEmailContract.UiState
+import com.cevdetkilickeser.gardrops.data.repository.AuthRepository
 import com.cevdetkilickeser.gardrops.ui.screen.signupwithusernameandemail.SignUpWithUsernameAndEmailContract.UiAction
 import com.cevdetkilickeser.gardrops.ui.screen.signupwithusernameandemail.SignUpWithUsernameAndEmailContract.UiEffect
+import com.cevdetkilickeser.gardrops.ui.screen.signupwithusernameandemail.SignUpWithUsernameAndEmailContract.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -16,7 +17,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SignUpWithUsernameOrEmailViewModel @Inject constructor(): ViewModel() {
+class SignUpWithUsernameAndEmailViewModel @Inject constructor(
+    private val authRepository: AuthRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UiState())
     val uiState = _uiState.asStateFlow()
@@ -35,7 +38,33 @@ class SignUpWithUsernameOrEmailViewModel @Inject constructor(): ViewModel() {
             UiAction.CommercialEmailCheckboxClicked -> updateUiState { copy(isCommercialEmailChecked = !uiState.value.isCommercialEmailChecked) }
             UiAction.CommercialEmailTextClicked -> viewModelScope.launch { emitUiEffect(UiEffect.NavigateToCommercialEmailScreen) }
             UiAction.PrivacyPolicyTextClicked -> viewModelScope.launch { emitUiEffect(UiEffect.NavigateToPrivacyPolicyScreen) }
-            is UiAction.SignUpButtonClicked -> TODO()
+            is UiAction.SignUpButtonClicked -> signUpClicked(
+                action.username,
+                action.email,
+                action.password,
+                action.isUserAgreementChecked
+            )
+        }
+    }
+
+    private fun signUpClicked(
+        username: String,
+        email: String,
+        password: String,
+        isUserAgreementChecked: Boolean
+    ) {
+        viewModelScope.launch {
+            val result = authRepository.signUpWithUsernameOrEmail(
+                username,
+                email,
+                password,
+                isUserAgreementChecked
+            )
+            if (result.first) {
+                emitUiEffect(UiEffect.NavigateToHomeScreen)
+            } else {
+                emitUiEffect(UiEffect.ShowSnackbar(result.second))
+            }
         }
     }
 

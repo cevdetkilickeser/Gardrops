@@ -20,7 +20,12 @@ object SignUpWithUsernameAndEmailContract {
         data object CommercialEmailCheckboxClicked : UiAction
         data object CommercialEmailTextClicked : UiAction
         data object PrivacyPolicyTextClicked : UiAction
-        data class SignUpButtonClicked(val username: String, val email: String, val password: String) : UiAction
+        data class SignUpButtonClicked(
+            val username: String,
+            val email: String,
+            val password: String,
+            val isUserAgreementChecked: Boolean
+        ) : UiAction
 
     }
 
