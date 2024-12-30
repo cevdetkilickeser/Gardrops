@@ -17,9 +17,9 @@ class AuthRepositoryImpl @Inject constructor(
         password: String,
         isUserAgreementChecked: Boolean
     ): Pair<Boolean, String> {
-        val checkFieldsResult = checkFields(username, email, password, isUserAgreementChecked)
-        return if (!checkFieldsResult.first) {
-            Pair(false, checkFieldsResult.second)
+        val checkSignupFieldsResult = checkSignUpFields(username, email, password, isUserAgreementChecked)
+        return if (!checkSignupFieldsResult.first) {
+            Pair(false, checkSignupFieldsResult.second)
         } else {
             val checkUsernameAvailabilityResult = checkUsernameAvailability(username)
             return if (!checkUsernameAvailabilityResult.first) {
@@ -39,7 +39,7 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun checkFields(
+    override suspend fun checkSignUpFields(
         username: String, email: String, password: String, isUserAgreementChecked: Boolean
     ): Pair<Boolean, String> {
         return if (!isUserAgreementChecked) {
@@ -98,6 +98,67 @@ class AuthRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             e.printStackTrace()
             throw Exception("Failed to add username to Firestore: ${e.message}")
+        }
+    }
+
+
+    override suspend fun checkSignInFields(
+        emailOrUsername: String
+    ): Pair<Boolean, String> {
+        return if (emailOrUsername.isEmpty()) {
+            Pair(false, "Bir kullanıcı adı belirleyin")
+        } else {
+            Pair(true, "")
+        }
+    }
+
+    override suspend fun signInWithEmailAndPassword(
+        email: String,
+        password: String
+    ): Pair<Boolean, String> {
+        return try {
+            auth.signInWithEmailAndPassword(email, password).await()
+            Pair(true, "")
+        } catch (e: Exception) {
+            Pair(false, e.localizedMessage ?: "Bir hata oluştu")
+        }
+    }
+
+    override suspend fun signInWithEmailOrUsername(
+        emailOrUsername: String,
+        password: String
+    ): Pair<Boolean, String> {
+        val checkSignInFieldsResult = checkSignInFields(emailOrUsername)
+        return if(!checkSignInFieldsResult.first) {
+            Pair(false, checkSignInFieldsResult.second)
+        } else {
+             if (emailOrUsername.contains("@")) {
+                try {
+                    auth.signInWithEmailAndPassword(emailOrUsername, password).await()
+                    Pair(true, "")
+                }  catch (e: Exception) {
+                    Pair(false, e.localizedMessage ?: "Bir hata oluştu")
+                }
+            } else {
+                try {
+                    val querySnapshot = firestore.collection("gardropsUsernameTable")
+                        .whereEqualTo("username", emailOrUsername)
+                        .get()
+                        .await()
+                    if (querySnapshot.isEmpty) {
+                        Pair(false, "Şifre, e-posta ya da kullanıcı adı hatalı görünüyor")
+                    } else {
+                        val email = querySnapshot.documents[0].getString("email") ?: ""
+                        if (email.isEmpty()) {
+                            Pair(false, "Bir hata oluştu")
+                        } else {
+                            signInWithEmailAndPassword(email, password)
+                        }
+                    }
+                } catch (e: Exception) {
+                    Pair(false, e.localizedMessage ?: "Bir hata oluştu")
+                }
+            }
         }
     }
 }
