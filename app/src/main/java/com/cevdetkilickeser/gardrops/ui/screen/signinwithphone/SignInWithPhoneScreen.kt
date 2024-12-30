@@ -25,7 +25,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.OffsetMapping
+import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.cevdetkilickeser.gardrops.common.CollectWithLifecycle
@@ -43,6 +46,7 @@ fun SignInWithPhoneScreen(
     uiState: UiState,
     uiEffect: Flow<UiEffect>,
     uiAction: (UiAction) -> Unit,
+    mobileNumberFilter: (AnnotatedString) -> TransformedText,
     navigateToSignInWithUsernameOrEmail: () -> Unit,
     navigateToSignUpWithUsernameOrEmail: () -> Unit,
     navigateToHomeScreen: () -> Unit,
@@ -102,7 +106,8 @@ fun SignInWithPhoneScreen(
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .align(Alignment.CenterStart)
+                            .align(Alignment.CenterStart),
+                        visualTransformation = { mobileNumberFilter(it) }
                     )
                     if (uiState.isClearTextIconVisible) {
                         IconButton(
@@ -154,6 +159,7 @@ private fun SignInWithPhoneScreenPreview() {
             uiState = UiState(),
             uiEffect = emptyFlow(),
             uiAction = {},
+            mobileNumberFilter = { TransformedText(AnnotatedString(""), OffsetMapping.Identity) },
             navigateToSignInWithUsernameOrEmail = {},
             navigateToSignUpWithUsernameOrEmail = {},
             navigateToHomeScreen = {},

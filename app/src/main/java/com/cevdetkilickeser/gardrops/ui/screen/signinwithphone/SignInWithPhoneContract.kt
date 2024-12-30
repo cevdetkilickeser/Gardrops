@@ -11,7 +11,7 @@ object SignInWithPhoneContract {
     )
 
     sealed interface UiAction {
-        data class PhoneNumberChanged(val text: String) : UiAction
+        data class PhoneNumberChanged(val phoneNumber: String) : UiAction
         data object ClearPhoneNumberClicked : UiAction
         data object SignInClicked : UiAction
         data class ContinueWithUsernameOrEmailClicked(val continueType: ContinueType) : UiAction
