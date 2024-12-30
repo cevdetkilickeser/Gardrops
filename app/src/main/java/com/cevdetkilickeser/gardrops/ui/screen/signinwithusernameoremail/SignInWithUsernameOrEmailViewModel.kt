@@ -2,6 +2,7 @@ package com.cevdetkilickeser.gardrops.ui.screen.signinwithusernameoremail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.cevdetkilickeser.gardrops.data.repository.AuthRepository
 import com.cevdetkilickeser.gardrops.ui.screen.signinwithusernameoremail.SignInWithUsernameOrEmailContract.UiEffect
 import com.cevdetkilickeser.gardrops.ui.screen.signinwithusernameoremail.SignInWithUsernameOrEmailContract.UiState
 import com.cevdetkilickeser.gardrops.ui.screen.signinwithusernameoremail.SignInWithUsernameOrEmailContract.UiAction
@@ -16,7 +17,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SignInWithUsernameOrEmailViewModel @Inject constructor() : ViewModel() {
+class SignInWithUsernameOrEmailViewModel @Inject constructor(
+    private val authRepository: AuthRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UiState())
     val uiState = _uiState.asStateFlow()
@@ -29,8 +32,19 @@ class SignInWithUsernameOrEmailViewModel @Inject constructor() : ViewModel() {
             is UiAction.EmailOrUsernameChanged -> updateUiState { copy(emailOrUsername = action.emailOrUsername) }
             is UiAction.PasswordChanged -> updateUiState { copy(password = action.password) }
             is UiAction.PasswordVisibilityChanged -> updateUiState { copy(isPasswordVisible = !uiState.value.isPasswordVisible) }
-            is UiAction.SignInButtonClicked -> TODO()
+            is UiAction.SignInButtonClicked -> signInWithEmailOrUsername(action.emailOrUsername, action.password)
             UiAction.RememberPasswordClicked -> viewModelScope.launch { emitUiEffect(UiEffect.NavigateToForgotPasswordScreen) }
+        }
+    }
+
+    private fun signInWithEmailOrUsername(emailOrUsername: String, password: String) {
+        viewModelScope.launch {
+            val authResult = authRepository.signInWithEmailOrUsername(emailOrUsername, password)
+            if (authResult.first) {
+                emitUiEffect(UiEffect.NavigateToHomeScreen)
+            } else {
+                emitUiEffect(UiEffect.ShowSnackbar(authResult.second))
+            }
         }
     }
 

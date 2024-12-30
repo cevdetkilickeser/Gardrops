@@ -17,7 +17,7 @@ object SignInWithUsernameOrEmailContract {
     }
 
     sealed class UiEffect {
-        data class ShowToast(val message: String) : UiEffect()
+        data class ShowSnackbar(val message: String) : UiEffect()
         data object NavigateToHomeScreen : UiEffect()
         data object NavigateToForgotPasswordScreen : UiEffect()
 
