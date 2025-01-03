@@ -90,6 +90,13 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.storage)
+
+    //Coil
+    implementation(libs.coil.compose)
+
+    implementation (libs.androidx.material.icons.extended)
+
+
 }
 
 kapt {
