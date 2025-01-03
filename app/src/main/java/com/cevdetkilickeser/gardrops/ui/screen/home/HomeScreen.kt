@@ -69,14 +69,14 @@ fun HomeScreen() {
                     .align(Alignment.CenterEnd)
             ) {
                 IconButton(
-                    onClick = { /*TODO*/ }
+                    onClick = {  }
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.FavoriteBorder, contentDescription = null
                     )
                 }
                 IconButton(
-                    onClick = { /*TODO*/ }
+                    onClick = {  }
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.ShoppingBag, contentDescription = null,

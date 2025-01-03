@@ -48,7 +48,7 @@ fun VerifySMSScreen(
     uiEffect.CollectWithLifecycle { effect ->
         when (effect) {
             UiEffect.NavigateToHomeScreen -> navigateToHomeScreen()
-            is UiEffect.ShowSnackbar -> TODO()
+            is UiEffect.ShowSnackbar -> { }
         }
     }
     Column(
