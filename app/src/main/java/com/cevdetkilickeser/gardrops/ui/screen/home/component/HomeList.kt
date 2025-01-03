@@ -1,4 +1,4 @@
-package com.cevdetkilickeser.gardrops.ui.screen.home
+package com.cevdetkilickeser.gardrops.ui.screen.home.component
 
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid

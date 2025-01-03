@@ -1,4 +1,4 @@
-package com.cevdetkilickeser.gardrops.ui.screen.home
+package com.cevdetkilickeser.gardrops.ui.screen.home.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

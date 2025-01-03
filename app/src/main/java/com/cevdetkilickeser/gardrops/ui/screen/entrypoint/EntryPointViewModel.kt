@@ -30,7 +30,7 @@ class EntryPointViewModel @Inject constructor() : ViewModel() {
 
             UiAction.SignUpClicked -> updateUiState { copy(isSignUpBottomSheetVisible = true) }
             UiAction.SignInClicked -> updateUiState { copy(isSignInBottomSheetVisible = true) }
-            is UiAction.ContinueWithFacebookClicked -> TODO()
+            is UiAction.ContinueWithFacebookClicked -> { }
             is UiAction.ContinueWithPhoneClicked -> viewModelScope.launch {
                 emitUiEffect(UiEffect.NavigateToSignInWithPhoneScreen(action.continueType))
             }

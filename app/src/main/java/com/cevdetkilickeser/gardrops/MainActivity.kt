@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             GardropsTheme {
                 val navController = rememberNavController()
-                val startDestination = Screen.Home
+                val startDestination = Screen.EntryPoint
                 val currentBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = currentBackStackEntry?.destination?.route
                 Scaffold(

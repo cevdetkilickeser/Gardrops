@@ -36,6 +36,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cevdetkilickeser.gardrops.R
+import com.cevdetkilickeser.gardrops.ui.screen.home.component.LatestContent
+import com.cevdetkilickeser.gardrops.ui.screen.home.component.PremiumContent
 import com.cevdetkilickeser.gardrops.ui.theme.GardropsTheme
 import com.cevdetkilickeser.gardrops.ui.theme.SearchBarBackground
 

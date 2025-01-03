@@ -1,4 +1,4 @@
-package com.cevdetkilickeser.gardrops.ui.screen.home
+package com.cevdetkilickeser.gardrops.ui.screen.home.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

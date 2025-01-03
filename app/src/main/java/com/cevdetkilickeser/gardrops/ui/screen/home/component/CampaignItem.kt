@@ -1,4 +1,4 @@
-package com.cevdetkilickeser.gardrops.ui.screen.home
+package com.cevdetkilickeser.gardrops.ui.screen.home.component
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
