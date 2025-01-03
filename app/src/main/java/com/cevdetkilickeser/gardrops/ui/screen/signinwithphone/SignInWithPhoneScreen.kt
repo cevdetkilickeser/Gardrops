@@ -49,13 +49,13 @@ fun SignInWithPhoneScreen(
     mobileNumberFilter: (AnnotatedString) -> TransformedText,
     navigateToSignInWithUsernameOrEmail: () -> Unit,
     navigateToSignUpWithUsernameOrEmail: () -> Unit,
-    navigateToHomeScreen: () -> Unit,
+    navigateToVerifySMSScreen: () -> Unit,
     onBackClick: () -> Unit
 ) {
 
     uiEffect.CollectWithLifecycle { effect ->
         when (effect) {
-            UiEffect.NavigateToHomeScreen -> navigateToHomeScreen()
+            UiEffect.NavigateToVerifySMSScreen -> navigateToVerifySMSScreen()
             UiEffect.NavigateToSignInWithUsernameOrEmailScreen -> navigateToSignInWithUsernameOrEmail()
             UiEffect.NavigateToSignUpWithUsernameOrEmailScreen -> navigateToSignUpWithUsernameOrEmail()
         }
@@ -162,7 +162,7 @@ private fun SignInWithPhoneScreenPreview() {
             mobileNumberFilter = { TransformedText(AnnotatedString(""), OffsetMapping.Identity) },
             navigateToSignInWithUsernameOrEmail = {},
             navigateToSignUpWithUsernameOrEmail = {},
-            navigateToHomeScreen = {},
+            navigateToVerifySMSScreen = {},
             onBackClick = {}
         )
     }

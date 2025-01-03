@@ -1,28 +1,23 @@
 package com.cevdetkilickeser.gardrops.ui.screen.signinwithphone
 
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.input.OffsetMapping
-import androidx.compose.ui.text.input.TransformedText
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.cevdetkilickeser.gardrops.navigation.Screen
-import com.cevdetkilickeser.gardrops.toPhone
 import com.cevdetkilickeser.gardrops.ui.screen.entrypoint.composable.ContinueType
+import com.cevdetkilickeser.gardrops.ui.screen.signinwithphone.SignInWithPhoneContract.UiAction
+import com.cevdetkilickeser.gardrops.ui.screen.signinwithphone.SignInWithPhoneContract.UiEffect
+import com.cevdetkilickeser.gardrops.ui.screen.signinwithphone.SignInWithPhoneContract.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
-import javax.inject.Inject
-import com.cevdetkilickeser.gardrops.ui.screen.signinwithphone.SignInWithPhoneContract.UiState
-import com.cevdetkilickeser.gardrops.ui.screen.signinwithphone.SignInWithPhoneContract.UiAction
-import com.cevdetkilickeser.gardrops.ui.screen.signinwithphone.SignInWithPhoneContract.UiEffect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import timber.log.Timber
+import javax.inject.Inject
 
 @HiltViewModel
 class SignInWithPhoneViewModel @Inject constructor(
@@ -42,33 +37,17 @@ class SignInWithPhoneViewModel @Inject constructor(
 
     fun onAction(action: UiAction) {
         when (action) {
-            is UiAction.PhoneNumberChanged -> if (action.phoneNumber.length < 14) updateUiState { copy(phoneNumber = action.phoneNumber) }
-            UiAction.ClearPhoneNumberClicked -> updateUiState { copy(phoneNumber = "0 (5") }
-            UiAction.SignInClicked -> TODO()
+            is UiAction.PhoneNumberChanged -> phoneNumberChanged(action.phoneNumber)
+            UiAction.ClearPhoneNumberClicked -> updateUiState { copy(phoneNumber = "0 (5", isClearTextIconVisible = false) }
+            UiAction.SignInClicked -> viewModelScope.launch { emitUiEffect(UiEffect.NavigateToVerifySMSScreen) }
             is UiAction.ContinueWithUsernameOrEmailClicked -> continueWithUsernameOrEmailClicked(action.continueType)
         }
     }
 
-    fun mobileNumberFilter(text: AnnotatedString): TransformedText {
-        val formattedPhone = text.text.toPhone()
-        val origToTransformedOffset = formattedPhone.length
-        val formattedLength = formattedPhone.filterNot {
-            it.isDigit()
-        }.count()
-
-        val annotatedString = AnnotatedString(formattedPhone)
-
-        val phoneNumberOffsetTranslator = object : OffsetMapping {
-            override fun originalToTransformed(offset: Int): Int {
-                return origToTransformedOffset
-            }
-
-            override fun transformedToOriginal(offset: Int): Int {
-                Timber.d("transformedOffset: $offset")
-                return if (offset > 5) offset - formattedLength else offset
-            }
-        }
-        return TransformedText(annotatedString, phoneNumberOffsetTranslator)
+    private fun phoneNumberChanged(phoneNumber: String) {
+        if (phoneNumber.length < 14) updateUiState { copy(phoneNumber = phoneNumber) }
+        if (phoneNumber != "0 (5") updateUiState { copy(isClearTextIconVisible = true) }
+        else updateUiState { copy(isClearTextIconVisible = false) }
     }
 
     private fun continueWithUsernameOrEmailClicked(continueType: ContinueType) {

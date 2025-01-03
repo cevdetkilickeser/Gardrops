@@ -7,7 +7,7 @@ object SignInWithPhoneContract {
         val continueType: ContinueType = ContinueType.SIGN_IN,
         val phoneNumber: String = "0 (5",
         val isClearTextIconVisible: Boolean = false,
-        val isSignInButtonEnabled: Boolean = false
+        val isSignInButtonEnabled: Boolean = true
     )
 
     sealed interface UiAction {
@@ -20,6 +20,6 @@ object SignInWithPhoneContract {
     sealed class UiEffect {
         data object NavigateToSignInWithUsernameOrEmailScreen : UiEffect()
         data object NavigateToSignUpWithUsernameOrEmailScreen : UiEffect()
-        data object NavigateToHomeScreen : UiEffect()
+        data object NavigateToVerifySMSScreen : UiEffect()
     }
 }
