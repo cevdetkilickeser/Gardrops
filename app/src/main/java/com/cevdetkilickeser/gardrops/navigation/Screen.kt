@@ -1,6 +1,6 @@
 package com.cevdetkilickeser.gardrops.navigation
 
-import com.cevdetkilickeser.gardrops.ui.screen.entrypoint.composable.ContinueType
+import com.cevdetkilickeser.gardrops.ui.screen.authentication.entrypoint.composable.ContinueType
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -35,4 +35,16 @@ sealed interface Screen {
 
     @Serializable
     data object Home : Screen
+
+    @Serializable
+    data object Search : Screen
+
+    @Serializable
+    data object Add : Screen
+
+    @Serializable
+    data object Notification : Screen
+
+    @Serializable
+    data object Profile : Screen
 }

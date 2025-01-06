@@ -8,21 +8,25 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.cevdetkilickeser.gardrops.mobileNumberFilter
-import com.cevdetkilickeser.gardrops.ui.screen.commercialemail.CommercialEmailScreen
-import com.cevdetkilickeser.gardrops.ui.screen.entrypoint.EntryPointScreen
-import com.cevdetkilickeser.gardrops.ui.screen.entrypoint.EntryPointViewModel
+import com.cevdetkilickeser.gardrops.ui.screen.add.AddScreen
+import com.cevdetkilickeser.gardrops.ui.screen.authentication.commercialemail.CommercialEmailScreen
+import com.cevdetkilickeser.gardrops.ui.screen.authentication.entrypoint.EntryPointScreen
+import com.cevdetkilickeser.gardrops.ui.screen.authentication.entrypoint.EntryPointViewModel
 import com.cevdetkilickeser.gardrops.ui.screen.home.HomeScreen
-import com.cevdetkilickeser.gardrops.ui.screen.privacypolicy.PrivacyPolicyScreen
-import com.cevdetkilickeser.gardrops.ui.screen.verifysms.VerifySMSViewModel
-import com.cevdetkilickeser.gardrops.ui.screen.rememberpassword.RememberPasswordScreen
-import com.cevdetkilickeser.gardrops.ui.screen.signinwithphone.SignInWithPhoneScreen
-import com.cevdetkilickeser.gardrops.ui.screen.signinwithphone.SignInWithPhoneViewModel
-import com.cevdetkilickeser.gardrops.ui.screen.signinwithusernameoremail.SignInWithUsernameOrEmailScreen
-import com.cevdetkilickeser.gardrops.ui.screen.signinwithusernameoremail.SignInWithUsernameOrEmailViewModel
-import com.cevdetkilickeser.gardrops.ui.screen.signupwithusernameandemail.SignUpWithUsernameAndEmail
-import com.cevdetkilickeser.gardrops.ui.screen.signupwithusernameandemail.SignUpWithUsernameAndEmailViewModel
-import com.cevdetkilickeser.gardrops.ui.screen.useragreement.UserAgreementScreen
-import com.cevdetkilickeser.gardrops.ui.screen.verifysms.VerifySMSScreen
+import com.cevdetkilickeser.gardrops.ui.screen.authentication.privacypolicy.PrivacyPolicyScreen
+import com.cevdetkilickeser.gardrops.ui.screen.authentication.verifysms.VerifySMSViewModel
+import com.cevdetkilickeser.gardrops.ui.screen.authentication.rememberpassword.RememberPasswordScreen
+import com.cevdetkilickeser.gardrops.ui.screen.authentication.signinwithphone.SignInWithPhoneScreen
+import com.cevdetkilickeser.gardrops.ui.screen.authentication.signinwithphone.SignInWithPhoneViewModel
+import com.cevdetkilickeser.gardrops.ui.screen.authentication.signinwithusernameoremail.SignInWithUsernameOrEmailScreen
+import com.cevdetkilickeser.gardrops.ui.screen.authentication.signinwithusernameoremail.SignInWithUsernameOrEmailViewModel
+import com.cevdetkilickeser.gardrops.ui.screen.authentication.signupwithusernameandemail.SignUpWithUsernameAndEmail
+import com.cevdetkilickeser.gardrops.ui.screen.authentication.signupwithusernameandemail.SignUpWithUsernameAndEmailViewModel
+import com.cevdetkilickeser.gardrops.ui.screen.authentication.useragreement.UserAgreementScreen
+import com.cevdetkilickeser.gardrops.ui.screen.authentication.verifysms.VerifySMSScreen
+import com.cevdetkilickeser.gardrops.ui.screen.notification.NotificationScreen
+import com.cevdetkilickeser.gardrops.ui.screen.profile.ProfileScreen
+import com.cevdetkilickeser.gardrops.ui.screen.search.SearchScreen
 
 @Composable
 fun AppNavigation(
@@ -32,9 +36,13 @@ fun AppNavigation(
 ) {
     NavHost(
         navController = navController,
-        startDestination = startDestination
+        startDestination = startDestination,
+        modifier = modifier
     ) {
-        composable<Screen.EntryPoint> {
+        composable<Screen.EntryPoint>(
+            exitTransition = Transitions.exitTransition,
+            popEnterTransition = Transitions.popEnterTransition
+        ) {
             val viewModel = hiltViewModel<EntryPointViewModel>()
             val uiState = viewModel.uiState.collectAsStateWithLifecycle()
             val uiEffect = viewModel.uiEffect
@@ -50,7 +58,12 @@ fun AppNavigation(
                 navigateToPrivacyPolicyScreen = { navController.navigate(Screen.PrivacyPolicy) }
             )
         }
-        composable<Screen.SignInWithPhone> {
+        composable<Screen.SignInWithPhone>(
+            enterTransition = Transitions.enterTransition,
+            exitTransition = Transitions.exitTransition,
+            popEnterTransition = Transitions.popEnterTransition,
+            popExitTransition = Transitions.popExitTransition
+        ) {
             val viewModel = hiltViewModel<SignInWithPhoneViewModel>()
             val uiState = viewModel.uiState.collectAsStateWithLifecycle()
             val uiEffect = viewModel.uiEffect
@@ -67,7 +80,11 @@ fun AppNavigation(
                 onBackClick = { navController.popBackStack() }
             )
         }
-        composable<Screen.VerifySMS> {
+        composable<Screen.VerifySMS>(
+            enterTransition = Transitions.enterTransition,
+            exitTransition = Transitions.exitTransition,
+            popExitTransition = Transitions.popExitTransition
+        ) {
             val viewModel = hiltViewModel<VerifySMSViewModel>()
             val uiState = viewModel.uiState.collectAsStateWithLifecycle()
             val uiEffect = viewModel.uiEffect
@@ -79,7 +96,11 @@ fun AppNavigation(
                 onBackClick = { navController.popBackStack() }
             )
         }
-        composable<Screen.SignUpWithUsernameOrEmail> {
+        composable<Screen.SignUpWithUsernameOrEmail>(
+            enterTransition = Transitions.enterTransition,
+            exitTransition = Transitions.exitTransition,
+            popExitTransition = Transitions.popExitTransition
+        )  {
             val viewModel = hiltViewModel<SignUpWithUsernameAndEmailViewModel>()
             val uiState = viewModel.uiState.collectAsStateWithLifecycle()
             val uiEffect = viewModel.uiEffect
@@ -94,7 +115,11 @@ fun AppNavigation(
                 onBackClick = { navController.popBackStack() },
             )
         }
-        composable<Screen.SignInWithUsernameOrEmail> {
+        composable<Screen.SignInWithUsernameOrEmail>(
+            enterTransition = Transitions.enterTransition,
+            exitTransition = Transitions.exitTransition,
+            popExitTransition = Transitions.popExitTransition
+        ) {
             val viewModel = hiltViewModel<SignInWithUsernameOrEmailViewModel>()
             val uiState = viewModel.uiState.collectAsStateWithLifecycle()
             val uiEffect = viewModel.uiEffect
@@ -107,28 +132,52 @@ fun AppNavigation(
                 onBackClick = { navController.popBackStack() }
             )
         }
-        composable<Screen.RememberPassword> {
+        composable<Screen.RememberPassword>(
+            enterTransition = Transitions.enterTransition,
+            popExitTransition = Transitions.popExitTransition
+        ) {
             RememberPasswordScreen(
                 onCloseClick = { navController.popBackStack() }
             )
         }
-        composable<Screen.UserAgreement> {
+        composable<Screen.UserAgreement>(
+            enterTransition = Transitions.enterTransition,
+            popExitTransition = Transitions.popExitTransition
+        ) {
             UserAgreementScreen(
                 onCloseClick = { navController.popBackStack() }
             )
         }
-        composable<Screen.PrivacyPolicy> {
+        composable<Screen.PrivacyPolicy>(
+            enterTransition = Transitions.enterTransition,
+            popExitTransition = Transitions.popExitTransition
+        ) {
             PrivacyPolicyScreen(
                 onCloseClick = { navController.popBackStack() }
             )
         }
-        composable<Screen.CommercialEmail> {
+        composable<Screen.CommercialEmail>(
+            enterTransition = Transitions.enterTransition,
+            popExitTransition = Transitions.popExitTransition
+        ) {
             CommercialEmailScreen(
                 onCloseClick = { navController.popBackStack() }
             )
         }
         composable<Screen.Home> {
             HomeScreen()
+        }
+        composable<Screen.Search> {
+            SearchScreen()
+        }
+        composable<Screen.Add> {
+            AddScreen()
+        }
+        composable<Screen.Notification> {
+            NotificationScreen()
+        }
+        composable<Screen.Profile> {
+            ProfileScreen()
         }
     }
 }
