@@ -24,17 +24,14 @@ class MainActivity : ComponentActivity() {
         setContent {
             GardropsTheme {
                 val navController = rememberNavController()
-                val startDestination = Screen.EntryPoint
+                val startDestination = Screen.Home
                 val currentBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = currentBackStackEntry?.destination?.route
                 Scaffold(
                     bottomBar = {
                         if (currentDestination != null) {
                             if (currentDestination.contains("Screen.Home")) {
-                                BottomAppBar(
-                                    currentDestination = Screen.Home,
-                                    onHomeClick = { navController.navigate(Screen.Home) }
-                                )
+                                BottomAppBar()
                             }
                         }
                     }

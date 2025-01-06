@@ -23,10 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.cevdetkilickeser.gardrops.R
 
 @Composable
-fun BottomAppBar(
-    currentDestination: Screen,
-    onHomeClick: () -> Unit
-) {
+fun BottomAppBar() {
     val selected = remember { mutableStateOf("Home") }
     Column {
         HorizontalDivider(color = Color.LightGray, thickness = 0.5.dp)
