@@ -13,6 +13,8 @@ import androidx.navigation.compose.rememberNavController
 import com.cevdetkilickeser.gardrops.navigation.AppNavigation
 import com.cevdetkilickeser.gardrops.navigation.BottomAppBar
 import com.cevdetkilickeser.gardrops.navigation.Screen
+import com.cevdetkilickeser.gardrops.navigation.bottomBarScreens
+import com.cevdetkilickeser.gardrops.navigation.toScreen
 import com.cevdetkilickeser.gardrops.ui.theme.GardropsTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -29,9 +31,16 @@ class MainActivity : ComponentActivity() {
                 val currentDestination = currentBackStackEntry?.destination?.route
                 Scaffold(
                     bottomBar = {
-                        if (currentDestination != null) {
-                            if (currentDestination.contains("Screen.Home")) {
-                                BottomAppBar()
+                        currentDestination?.let {
+                            if (currentDestination.toScreen() in bottomBarScreens) {
+                                BottomAppBar(
+                                    currentDestination.toScreen(),
+                                    onClickHome = { navController.navigate(Screen.Home) },
+                                    onClickSearch = { navController.navigate(Screen.Search) },
+                                    onClickAdd = { navController.navigate(Screen.Add) },
+                                    onClickNotifications = { navController.navigate(Screen.Notification) },
+                                    onClickProfile = { navController.navigate(Screen.Profile) }
+                                )
                             }
                         }
                     }

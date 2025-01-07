@@ -14,8 +14,6 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -23,8 +21,14 @@ import androidx.compose.ui.unit.dp
 import com.cevdetkilickeser.gardrops.R
 
 @Composable
-fun BottomAppBar() {
-    val selected = remember { mutableStateOf("Home") }
+fun BottomAppBar(
+    currentDestination: Screen,
+    onClickHome: () -> Unit,
+    onClickSearch: () -> Unit,
+    onClickAdd: () -> Unit,
+    onClickNotifications: () -> Unit,
+    onClickProfile: () -> Unit
+) {
     Column {
         HorizontalDivider(color = Color.LightGray, thickness = 0.5.dp)
         NavigationBar(
@@ -32,9 +36,14 @@ fun BottomAppBar() {
             modifier = Modifier.height(70.dp)
         ) {
             NavigationBarItem(
-                icon =  { Icon(painter = painterResource(R.drawable.png_menu_icon), contentDescription = null) },
-                selected = selected.value == "Home",
-                onClick = { selected.value = "Home" },
+                icon = {
+                    Icon(
+                        painter = painterResource(R.drawable.png_menu_icon),
+                        contentDescription = null
+                    )
+                },
+                selected = currentDestination == Screen.Home,
+                onClick = { onClickHome() },
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = MaterialTheme.colorScheme.primary,
                     unselectedIconColor = MaterialTheme.colorScheme.onBackground,
@@ -43,8 +52,8 @@ fun BottomAppBar() {
             )
             NavigationBarItem(
                 icon = { Icon(imageVector = Icons.Default.Search, contentDescription = null) },
-                selected = selected.value == "Search",
-                onClick = { selected.value = "Search" },
+                selected = currentDestination == Screen.Search,
+                onClick = { onClickSearch() },
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = MaterialTheme.colorScheme.primary,
                     unselectedIconColor = MaterialTheme.colorScheme.onBackground,
@@ -53,8 +62,8 @@ fun BottomAppBar() {
             )
             NavigationBarItem(
                 icon = { Icon(imageVector = Icons.Outlined.AddBox, contentDescription = null) },
-                selected = selected.value == "Add",
-                onClick = { selected.value = "Add" },
+                selected = currentDestination == Screen.Add,
+                onClick = { onClickAdd() },
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = MaterialTheme.colorScheme.primary,
                     unselectedIconColor = MaterialTheme.colorScheme.onBackground,
@@ -62,9 +71,14 @@ fun BottomAppBar() {
                 )
             )
             NavigationBarItem(
-                icon = { Icon(imageVector = Icons.Outlined.ChatBubbleOutline, contentDescription = null) },
-                selected = selected.value == "Notifications",
-                onClick = { selected.value = "Notifications" },
+                icon = {
+                    Icon(
+                        imageVector = Icons.Outlined.ChatBubbleOutline,
+                        contentDescription = null
+                    )
+                },
+                selected = currentDestination == Screen.Notification,
+                onClick = { onClickNotifications() },
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = MaterialTheme.colorScheme.primary,
                     unselectedIconColor = MaterialTheme.colorScheme.onBackground,
@@ -73,8 +87,8 @@ fun BottomAppBar() {
             )
             NavigationBarItem(
                 icon = { Icon(imageVector = Icons.Outlined.Person, contentDescription = null) },
-                selected = selected.value == "Profile",
-                onClick = { selected.value = "Profile" },
+                selected = currentDestination == Screen.Profile,
+                onClick = { onClickProfile() },
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = MaterialTheme.colorScheme.primary,
                     unselectedIconColor = MaterialTheme.colorScheme.onBackground,
