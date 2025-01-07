@@ -33,11 +33,13 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -56,11 +58,18 @@ fun HomeScreen() {
 
     var selectedTabIndex by remember { mutableIntStateOf(0) }
     val tabTitles = listOf("En Yeniler", "Premium")
-    val listState = rememberLazyListState()
-    val isVisible by remember {
-        derivedStateOf { listState.firstVisibleItemIndex == 0 }
-    }
     val density = LocalDensity.current
+    val listState = rememberLazyListState()
+    var previousScrollOffset by remember { mutableIntStateOf(0) }
+    var isVisible by remember { mutableStateOf(true) }
+
+    LaunchedEffect(listState) {
+        snapshotFlow { listState.firstVisibleItemScrollOffset }
+            .collect { currentOffset ->
+                isVisible = currentOffset <= previousScrollOffset
+                previousScrollOffset = currentOffset
+            }
+    }
 
     Column(
         modifier = Modifier
