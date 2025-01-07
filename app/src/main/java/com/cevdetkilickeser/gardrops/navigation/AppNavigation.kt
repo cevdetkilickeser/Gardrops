@@ -170,7 +170,9 @@ fun AppNavigation(
         composable<Screen.Search> {
             SearchScreen()
         }
-        composable<Screen.Add> {
+        composable<Screen.Add>(
+            enterTransition = Transitions.enterTransition,
+            popExitTransition = Transitions.popExitTransition) {
             AddScreen()
         }
         composable<Screen.Notification> {
