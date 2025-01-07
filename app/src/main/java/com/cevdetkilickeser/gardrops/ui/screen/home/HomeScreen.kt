@@ -80,7 +80,7 @@ fun HomeScreen() {
             modifier = Modifier
                 .fillMaxWidth()
                 .statusBarsPadding()
-                .padding(16.dp)
+                .padding(horizontal = 16.dp)
         ) {
             Image(
                 painter = painterResource(id = R.drawable.png_gardrops),
@@ -109,6 +109,7 @@ fun HomeScreen() {
                 }
             }
         }
+        Spacer(Modifier.height(8.dp))
         AnimatedVisibility(
             visible = isVisible,
             enter = slideInVertically { with(density) { -40.dp.roundToPx() } } + expandVertically(
@@ -166,7 +167,7 @@ fun HomeScreen() {
 
         when (selectedTabIndex) {
             0 -> LatestContent(listState = listState) {}
-            1 -> PremiumContent()
+            1 -> PremiumContent(listState = listState) {}
         }
     }
 }
