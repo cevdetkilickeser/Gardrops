@@ -179,7 +179,7 @@ fun AppNavigation(
             NotificationScreen()
         }
         composable<Screen.Profile> {
-            ProfileScreen()
+            ProfileScreen(navController = navController)
         }
     }
 }
