@@ -48,3 +48,21 @@ sealed interface Screen {
     @Serializable
     data object Profile : Screen
 }
+
+val bottomBarScreens = listOf(
+    Screen.Home,
+    Screen.Search,
+    Screen.Notification,
+    Screen.Profile
+)
+
+fun String.toScreen(): Screen? {
+    val screen = this.split(".").last()
+    return when (screen) {
+        Screen.Home.toString() -> Screen.Home
+        Screen.Search.toString() -> Screen.Search
+        Screen.Notification.toString() -> Screen.Notification
+        Screen.Profile.toString() -> Screen.Profile
+        else -> null
+    }
+}

@@ -31,10 +31,10 @@ class MainActivity : ComponentActivity() {
                 val currentDestination = currentBackStackEntry?.destination?.route
                 Scaffold(
                     bottomBar = {
-                        currentDestination?.let {
-                            if (currentDestination.toScreen() in bottomBarScreens) {
+                        currentDestination?.toScreen()?.let {
+                            if (it in bottomBarScreens) {
                                 BottomAppBar(
-                                    currentDestination.toScreen(),
+                                    it,
                                     onClickHome = { navController.navigate(Screen.Home) },
                                     onClickSearch = { navController.navigate(Screen.Search) },
                                     onClickAdd = { navController.navigate(Screen.Add) },
