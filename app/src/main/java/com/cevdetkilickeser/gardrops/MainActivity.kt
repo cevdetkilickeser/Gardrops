@@ -16,6 +16,7 @@ import com.cevdetkilickeser.gardrops.navigation.Screen
 import com.cevdetkilickeser.gardrops.navigation.bottomBarScreens
 import com.cevdetkilickeser.gardrops.navigation.toScreen
 import com.cevdetkilickeser.gardrops.ui.theme.GardropsTheme
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -26,7 +27,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             GardropsTheme {
                 val navController = rememberNavController()
-                val startDestination = Screen.Home
+                val startDestination = if (FirebaseAuth.getInstance().currentUser == null) {
+                    Screen.EntryPoint
+                } else {
+                    Screen.Home
+                }
                 val currentBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = currentBackStackEntry?.destination?.route
                 Scaffold(
